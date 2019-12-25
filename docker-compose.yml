@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: "postgres"
+    container_name: "my_doobie_postgres"
+    environment:
+      - POSTGRES_USER=doobie
+      - POSTGRES_PASSWORD=doobie
+      - POSTGRES_DB=doobie_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
