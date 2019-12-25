@@ -5,8 +5,6 @@ import doobie.implicits._
 import com.leysoft.domain.{User, UserRepository}
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
 
-import scala.util.Try
-
 final case class DoobieUserRepository[P[_]: Monad]()(implicit db: DoobieConfiguration[P]) extends UserRepository[P] {
   import cats.syntax.functor._
   import cats.syntax.flatMap._
