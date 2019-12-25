@@ -1,4 +1,4 @@
-# Akka Slick PotgreSQL
+# Doobie PotgreSQL
 
 Requirements:
    * JDK >= 1.8
