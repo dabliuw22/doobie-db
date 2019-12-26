@@ -6,6 +6,7 @@ import com.leysoft.application.DefaultReactiveUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieReactiveUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
+import com.leysoft.infrastructure.doobie.util.DoobieUtil
 import monix.eval.Task
 import monix.execution.{Ack, Scheduler}
 import monix.reactive.Observable
@@ -17,6 +18,7 @@ object MainMonixReactive extends App {
   implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
+  implicit val dbUtil: DoobieUtil[Task] = DoobieUtil[Task]
   val userRepository = DoobieReactiveUserRepository[Observable, Task]()
   val userService = DefaultReactiveUserService[Observable, Task](userRepository)
   val errorHandler: Throwable => Observable[User] = _ => Observable.empty

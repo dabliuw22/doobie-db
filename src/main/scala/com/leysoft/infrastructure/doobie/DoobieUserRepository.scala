@@ -3,9 +3,9 @@ package com.leysoft.infrastructure.doobie
 import cats.Monad
 import doobie.implicits._
 import com.leysoft.domain.{User, UserRepository}
-import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
+import com.leysoft.infrastructure.doobie.util.DoobieUtil
 
-final case class DoobieUserRepository[P[_]: Monad]()(implicit db: DoobieConfiguration[P]) extends UserRepository[P] {
+final case class DoobieUserRepository[P[_]: Monad]()(implicit db: DoobieUtil[P]) extends UserRepository[P] {
   import cats.syntax.functor._
   import cats.syntax.flatMap._
 

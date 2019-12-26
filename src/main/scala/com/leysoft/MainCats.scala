@@ -6,6 +6,7 @@ import com.leysoft.application.DefaultUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
+import com.leysoft.infrastructure.doobie.util.DoobieUtil
 import monix.eval.Task
 import monix.execution.Scheduler
 
@@ -16,6 +17,7 @@ object MainCats extends App {
   val i = Task.contextShift(Scheduler.global)
   implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
   implicit val db: DoobieConfiguration[IO] = DoobieConfiguration[IO]
+  implicit val dbUtil: DoobieUtil[IO] = DoobieUtil[IO]
   val userRepository = DoobieUserRepository[IO]()
   val userService = DefaultUserService[IO](userRepository)
   // val newUser = userService.create(User(100, "username100")).unsafeRunSync()

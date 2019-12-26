@@ -2,12 +2,11 @@ package com.leysoft.infrastructure.doobie
 
 import cats.Monad
 import com.leysoft.domain.{ReactiveUserRepository, User}
-import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
-import com.leysoft.infrastructure.doobie.util.{NaturalTransformations, ReactiveFactory}
+import com.leysoft.infrastructure.doobie.util.{DoobieUtil, NaturalTransformations, ReactiveFactory}
 
-final case class DoobieReactiveUserRepository[P[_]: Monad, T[_]]()(implicit db: DoobieConfiguration[T],
-                                                                          converter: NaturalTransformations[P, T],
-                                                                          factory: ReactiveFactory[P]) extends ReactiveUserRepository[P, T] {
+final case class DoobieReactiveUserRepository[P[_]: Monad, T[_]]()(implicit db: DoobieUtil[T],
+                                                                   converter: NaturalTransformations[P, T],
+                                                                   factory: ReactiveFactory[P]) extends ReactiveUserRepository[P, T] {
   import cats.syntax.functor._
   import cats.syntax.flatMap._
   import doobie.implicits._
