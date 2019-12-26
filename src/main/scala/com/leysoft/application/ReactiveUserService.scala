@@ -9,4 +9,6 @@ trait ReactiveUserService[P[_], Q[_]] {
   def all: P[User]
 
   def create(user: User): P[User]
+
+  def remove(id: Long): P[Unit]
 }

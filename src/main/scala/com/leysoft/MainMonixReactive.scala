@@ -26,7 +26,7 @@ object MainMonixReactive extends App {
   val userService = DefaultReactiveUserService[Observable, Task](userRepository)
   val errorHandler: Throwable => Observable[User] = _ => Observable.empty
 
-  val newUser = userService.create(User(16, "username16"))
+  userService.create(User(16, "username16"))
     .doOnError { error => Task(logger.error(s"Error: ${error.getMessage}")) }
     .onErrorHandleWith { errorHandler }
     .subscribe { newUser =>
@@ -34,14 +34,24 @@ object MainMonixReactive extends App {
       Future { Ack.Stop }
     }
 
-  val usersTask = userService.all
+  userService.remove(16)
+    .doOnError { error => Task(logger.error(s"Error: ${error.getMessage}")) }
+    .onErrorHandleWith { errorHandler }
+    .subscribe { _ =>
+      logger.info("Deleted...")
+      Future { Ack.Stop }
+    }
+
+  userService.all
+    .doOnError { error => Task(logger.error(s"Error: ${error.getMessage}")) }
     .onErrorHandleWith { errorHandler }
     .subscribe { users =>
       logger.info(s"Users: $users")
       Future { Ack.Continue }
     }
 
-  val userTask = userService.get(1)
+  userService.get(1)
+    .doOnError { error => Task(logger.error(s"Error: ${error.getMessage}")) }
     .onErrorHandleWith { errorHandler }
     .subscribe { user =>
       logger.info(s"User: $user")

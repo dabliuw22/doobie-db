@@ -15,4 +15,7 @@ final case class DoobieReactiveUserRepository[P[_]: Monad, Q[_]]()(implicit db: 
 
   override def save(user: User): P[User] = db.write(sql"INSERT INTO users VALUES(${user.id}, ${user.name})".update)
     .map { _ => user }
+
+  override def delete(id: Long): P[Unit] = db.write(sql"DELETE FROM users WHERE id = $id".update)
+    .map(_ => ())
 }

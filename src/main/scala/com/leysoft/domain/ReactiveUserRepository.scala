@@ -7,4 +7,6 @@ trait ReactiveUserRepository[P[_], Q[_]] {
   def findBy(id: Long): P[User]
 
   def save(user: User): P[User]
+
+  def delete(id: Long): P[Unit]
 }

@@ -9,4 +9,6 @@ final case class DefaultReactiveUserService[P[_]: Monad, Q[_]](userRepository: R
   override def all: P[User] = userRepository.findAll
 
   override def create(user: User): P[User] = userRepository.save(user)
+
+  override def remove(id: Long): P[Unit] = userRepository.delete(id)
 }
