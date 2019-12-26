@@ -4,9 +4,9 @@ import cats.Monad
 import com.leysoft.domain.{ReactiveUserRepository, User}
 import com.leysoft.infrastructure.doobie.util.{DoobieUtil, NaturalTransformations, ReactiveFactory}
 
-final case class DoobieReactiveUserRepository[P[_]: Monad, T[_]]()(implicit db: DoobieUtil[T],
-                                                                   converter: NaturalTransformations[P, T],
-                                                                   factory: ReactiveFactory[P]) extends ReactiveUserRepository[P, T] {
+final case class DoobieReactiveUserRepository[P[_]: Monad, Q[_]]()(implicit db: DoobieUtil[Q],
+                                                                   converter: NaturalTransformations[P, Q],
+                                                                   factory: ReactiveFactory[P]) extends ReactiveUserRepository[P, Q] {
   import cats.syntax.functor._
   import cats.syntax.flatMap._
   import doobie.implicits._

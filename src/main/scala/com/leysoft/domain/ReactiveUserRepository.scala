@@ -1,6 +1,6 @@
 package com.leysoft.domain
 
-trait ReactiveUserRepository[P[_], T[_]] {
+trait ReactiveUserRepository[P[_], Q[_]] {
 
   def findAll: P[User]
 

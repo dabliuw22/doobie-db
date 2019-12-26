@@ -2,7 +2,7 @@ package com.leysoft.application
 
 import com.leysoft.domain.User
 
-trait ReactiveUserService[P[_], T[_]] {
+trait ReactiveUserService[P[_], Q[_]] {
 
   def get(id: Long): P[User]
 

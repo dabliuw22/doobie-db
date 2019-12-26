@@ -2,7 +2,7 @@ package com.leysoft.application
 import cats.Monad
 import com.leysoft.domain.{ReactiveUserRepository, User}
 
-final case class DefaultReactiveUserService[P[_]: Monad, T[_]](userRepository: ReactiveUserRepository[P, T]) extends ReactiveUserService[P, T] {
+final case class DefaultReactiveUserService[P[_]: Monad, Q[_]](userRepository: ReactiveUserRepository[P, Q]) extends ReactiveUserService[P, Q] {
 
   override def get(id: Long): P[User] = userRepository.findBy(id)
 
