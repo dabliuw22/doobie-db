@@ -7,13 +7,16 @@ import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
 import com.leysoft.infrastructure.doobie.util.DoobieUtil
+import com.typesafe.scalalogging.Logger
 import monix.eval.Task
 import monix.execution.{Ack, Scheduler}
 import monix.reactive.Observable
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 
 object MainMonix extends App {
+  val logger = Logger(LoggerFactory.getLogger(MainMonix.getClass))
   val system = ActorSystem("doobie-monix-system")
   implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
@@ -26,14 +29,14 @@ object MainMonix extends App {
   val usersTask = userService.all.onErrorFallbackTo(Task { List() })
   Observable.fromTask(usersTask)
     .subscribe { users =>
-      println(s"Users: $users")
+      logger.info(s"Users: $users")
       Future { Ack.Continue }
     }
   val userTask = userService.get(1)
   Observable.fromTask(userTask)
     .onErrorHandleWith { _ => Observable.empty }
       .subscribe { user =>
-        println(s"User: $user")
+        logger.info(s"User: $user")
         Future { Ack.Stop }
       }
 }
