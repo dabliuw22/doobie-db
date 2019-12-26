@@ -1,4 +1,4 @@
-package com.leysoft.util
+package com.leysoft.infrastructure.doobie.util
 
 import cats.~>
 import monix.eval.Task

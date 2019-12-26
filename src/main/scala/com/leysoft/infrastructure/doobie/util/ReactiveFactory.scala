@@ -1,4 +1,4 @@
-package com.leysoft.util
+package com.leysoft.infrastructure.doobie.util
 
 import monix.reactive.Observable
 
