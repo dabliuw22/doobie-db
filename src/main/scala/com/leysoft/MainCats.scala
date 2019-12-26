@@ -2,7 +2,7 @@ package com.leysoft
 
 import akka.actor.ActorSystem
 import cats.effect.{ContextShift, IO}
-import com.leysoft.application.{DefaultUserService, UserService}
+import com.leysoft.application.DefaultUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration

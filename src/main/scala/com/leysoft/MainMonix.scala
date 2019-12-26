@@ -1,7 +1,7 @@
 package com.leysoft
 
 import akka.actor.ActorSystem
-import cats.effect.{ContextShift, IO}
+import cats.effect.ContextShift
 import com.leysoft.application.DefaultUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
@@ -14,7 +14,7 @@ import scala.concurrent.Future
 
 object MainMonix extends App {
   val system = ActorSystem("doobie-monix-system")
-  implicit val scheduler: Scheduler = Scheduler.global
+  implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
   val userRepository = DoobieUserRepository[Task]()
