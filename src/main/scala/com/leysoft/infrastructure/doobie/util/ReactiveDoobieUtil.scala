@@ -3,9 +3,10 @@ package com.leysoft.infrastructure.doobie.util
 import cats.Monad
 import cats.effect.{Async, ContextShift}
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
-import doobie.free.connection.ConnectionIO
+import com.typesafe.scalalogging.Logger
 import doobie.util.query.Query0
 import doobie.util.update.Update0
+import org.slf4j.LoggerFactory
 
 final case class ReactiveDoobieUtil[P[_]: Monad, Q[_]: Async: ContextShift]()(implicit db: DoobieConfiguration[Q],
                                                                               converter: NaturalTransformations[P, Q],
@@ -13,13 +14,23 @@ final case class ReactiveDoobieUtil[P[_]: Monad, Q[_]: Async: ContextShift]()(im
   import doobie.implicits._
   import cats.syntax.flatMap._
   import cats.syntax.functor._
-  private val transactor = db.transactor
 
-  def read[T](sqlStatement: Query0[T]): P[T] = converter.apply(sqlStatement.unique.transact(transactor))
+  private val looger = Logger(LoggerFactory.getLogger(ReactiveDoobieUtil.getClass))
 
-  def readList[T](sqlStatement: Query0[T]): P[T] = converter.apply(sqlStatement.stream.compile.toList.transact(transactor))
-    .flatMap { factory.list }
+  def read[T](sqlStatement: Query0[T]): P[T] = {
+    looger.info(s"READ: ${sqlStatement.sql}")
+    converter.apply(sqlStatement.unique.transact(db.transactor))
+  }
 
-  def write(sqlStatement: Update0): P[Int] = converter.apply(sqlStatement.run.transact(transactor))
-    .flatMap { factory.zero }
+  def readList[T](sqlStatement: Query0[T]): P[T] = {
+    looger.info(s"READ_LIST: ${sqlStatement.sql}")
+    converter.apply(sqlStatement.stream.compile.toList.transact(db.transactor))
+      .flatMap { factory.list }
+  }
+
+  def write(sqlStatement: Update0): P[Int] = {
+    looger.info(s"WRITE: ${sqlStatement.sql}")
+    converter.apply(sqlStatement.run.transact(db.transactor))
+      .flatMap { factory.zero }
+  }
 }

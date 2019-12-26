@@ -6,6 +6,7 @@ import doobie.free.connection.ConnectionIO
 
 final case class DoobieUtil[P[_]: Async: ContextShift]()(implicit db: DoobieConfiguration[P]) {
   import doobie.implicits._
+
   private val transactor = db.transactor
 
   def execute[T](sqlStatement: ConnectionIO[T]): P[T] = sqlStatement.transact(transactor)
