@@ -18,6 +18,7 @@ import scala.concurrent.Future
 object MainMonixReactive extends App {
   val logger = Logger(LoggerFactory.getLogger(MainMonixReactive.getClass))
   val system = ActorSystem("doobie-monix-reactive-system")
+  import com.leysoft.infrastructure.doobie.util.NaturalTransformations._ // for (Task ~> Observable) instance
   implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
@@ -31,7 +32,7 @@ object MainMonixReactive extends App {
     .onErrorHandleWith { errorHandler }
     .subscribe { newUser =>
       logger.info(s"New User: $newUser")
-      Future { Ack.Stop }
+      Future(Ack.Stop)
     }
 
   userService.remove(16)
@@ -39,7 +40,7 @@ object MainMonixReactive extends App {
     .onErrorHandleWith { errorHandler }
     .subscribe { _ =>
       logger.info("Deleted...")
-      Future { Ack.Stop }
+      Future(Ack.Stop)
     }
 
   userService.all
@@ -47,7 +48,7 @@ object MainMonixReactive extends App {
     .onErrorHandleWith { errorHandler }
     .subscribe { users =>
       logger.info(s"Users: $users")
-      Future { Ack.Continue }
+      Future(Ack.Continue)
     }
 
   userService.get(1)
@@ -55,6 +56,6 @@ object MainMonixReactive extends App {
     .onErrorHandleWith { errorHandler }
     .subscribe { user =>
       logger.info(s"User: $user")
-      Future { Ack.Stop }
+      Future(Ack.Stop)
     }
 }

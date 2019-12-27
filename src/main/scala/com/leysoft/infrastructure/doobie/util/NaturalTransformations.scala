@@ -6,20 +6,13 @@ import monix.reactive.Observable
 
 import scala.concurrent.Future
 
-trait NaturalTransformations[P[_], Q[_]] extends (Q ~> P) {
-
-  def apply[A](fa: Q[A]): P[A]
-}
-
 object NaturalTransformations {
 
-  def apply[P[_], Q[_]](implicit converter: NaturalTransformations[P, Q]) = converter
-
-  implicit val taskToObservable: NaturalTransformations[Observable, Task] = new NaturalTransformations[Observable, Task] {
+  implicit val taskToObservable: Task ~> Observable = new (Task ~> Observable) {
     override def apply[A](fa: Task[A]): Observable[A] = Observable.fromTask(fa)
   }
 
-  implicit val futureToObservable: NaturalTransformations[Observable, Future] = new NaturalTransformations[Observable, Future] {
+  implicit val futureToObservable: Future ~> Observable = new (Future ~> Observable) {
     override def apply[A](fa: Future[A]): Observable[A] = Observable.fromFuture(fa)
   }
 }

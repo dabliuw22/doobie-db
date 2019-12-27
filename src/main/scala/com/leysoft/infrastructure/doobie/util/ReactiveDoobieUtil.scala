@@ -1,5 +1,6 @@
 package com.leysoft.infrastructure.doobie.util
 
+import cats.~>
 import cats.Monad
 import cats.effect.{Async, ContextShift}
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
@@ -9,7 +10,7 @@ import doobie.util.update.Update0
 import org.slf4j.LoggerFactory
 
 final case class ReactiveDoobieUtil[P[_]: Monad, Q[_]: Async: ContextShift]()(implicit db: DoobieConfiguration[Q],
-                                                                              converter: NaturalTransformations[P, Q],
+                                                                              converter: Q ~> P,
                                                                               factory: ReactiveFactory[P]) {
   import doobie.implicits._
   import cats.syntax.flatMap._
