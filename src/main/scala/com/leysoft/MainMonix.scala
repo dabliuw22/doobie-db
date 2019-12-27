@@ -30,13 +30,13 @@ object MainMonix extends App {
   Observable.fromTask(usersTask)
     .subscribe { users =>
       logger.info(s"Users: $users")
-      Future { Ack.Continue }
+      Future(Ack.Continue)
     }
   val userTask = userService.get(1)
   Observable.fromTask(userTask)
     .onErrorHandleWith { _ => Observable.empty }
       .subscribe { user =>
         logger.info(s"User: $user")
-        Future { Ack.Stop }
+        Future(Ack.Stop)
       }
 }
