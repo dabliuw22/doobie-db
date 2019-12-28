@@ -16,7 +16,7 @@ object MainCats extends App {
   implicit val cs: ContextShift[IO] = IO.contextShift(system.dispatcher)
   implicit val db: DoobieConfiguration[IO] = DoobieConfiguration[IO]
   implicit val dbUtil: DoobieUtil[IO] = DoobieUtil[IO]
-  val userRepository = DoobieUserRepository[IO]()
+  val userRepository = DoobieUserRepository[IO]
   val userService = DefaultUserService[IO](userRepository)
   // val newUser = userService.create(User(100, "username100")).unsafeRunSync()
   // println(s"New User: $newUser")

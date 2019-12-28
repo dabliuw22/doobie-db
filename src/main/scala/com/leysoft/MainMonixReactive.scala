@@ -23,7 +23,7 @@ object MainMonixReactive extends App {
   implicit val cs: ContextShift[Task] = Task.contextShift(Scheduler.io())
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
   implicit val dbUtil: ReactiveDoobieUtil[Observable, Task] = ReactiveDoobieUtil[Observable, Task]
-  val userRepository = DoobieReactiveUserRepository[Observable, Task]()
+  val userRepository = DoobieReactiveUserRepository[Observable, Task]
   val userService = DefaultReactiveUserService[Observable, Task](userRepository)
   val errorHandler: Throwable => Observable[User] = _ => Observable.empty
 

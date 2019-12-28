@@ -22,7 +22,7 @@ object MainMonix extends App {
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
   implicit val dbUtil: DoobieUtil[Task] = DoobieUtil[Task]
-  val userRepository = DoobieUserRepository[Task]()
+  val userRepository = DoobieUserRepository[Task]
   val userService = DefaultUserService[Task](userRepository)
   //val newUser = userService.create(User(200, "username200")).runSyncUnsafe()
   //println(s"New User: $newUser")

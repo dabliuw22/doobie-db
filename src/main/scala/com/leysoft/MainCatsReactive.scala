@@ -23,7 +23,7 @@ object MainCatsReactive extends App {
   implicit val cs: ContextShift[IO] = IO.contextShift(system.dispatcher)
   implicit val db: DoobieConfiguration[IO] = DoobieConfiguration[IO]
   implicit val dbUtil: ReactiveDoobieUtil[Observable, IO] = ReactiveDoobieUtil[Observable, IO]
-  val userRepository = DoobieReactiveUserRepository[Observable, IO]()
+  val userRepository = DoobieReactiveUserRepository[Observable, IO]
   val userService = DefaultReactiveUserService[Observable, IO](userRepository)
   val errorHandler: Throwable => Observable[User] = _ => Observable.empty
 
