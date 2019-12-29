@@ -6,7 +6,7 @@ import com.leysoft.application.DefaultUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
-import com.leysoft.infrastructure.doobie.util.DoobieUtil
+import com.leysoft.infrastructure.doobie.util.{DoobieUtil, HikariDoobieUtil, SimpleDoobieUtil}
 import com.typesafe.scalalogging.Logger
 import org.slf4j.LoggerFactory
 
@@ -15,7 +15,7 @@ object MainCats extends App {
   val system = ActorSystem("doobie-cats-system")
   implicit val cs: ContextShift[IO] = IO.contextShift(system.dispatcher)
   implicit val db: DoobieConfiguration[IO] = DoobieConfiguration[IO]
-  implicit val dbUtil: DoobieUtil[IO] = DoobieUtil[IO]
+  implicit val dbUtil: DoobieUtil[IO] = HikariDoobieUtil[IO]
   val userRepository = DoobieUserRepository[IO]
   val userService = DefaultUserService[IO](userRepository)
   // val newUser = userService.create(User(100, "username100")).unsafeRunSync()

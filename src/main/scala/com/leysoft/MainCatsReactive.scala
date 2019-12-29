@@ -6,7 +6,7 @@ import com.leysoft.application.DefaultReactiveUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieReactiveUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
-import com.leysoft.infrastructure.doobie.util.ReactiveDoobieUtil
+import com.leysoft.infrastructure.doobie.util.{ReactiveDoobieUtil, SimpleReactiveDoobieUtil}
 import com.typesafe.scalalogging.Logger
 import monix.eval.Task
 import monix.execution.{Ack, Scheduler}
@@ -22,7 +22,7 @@ object MainCatsReactive extends App {
   implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[IO] = IO.contextShift(system.dispatcher)
   implicit val db: DoobieConfiguration[IO] = DoobieConfiguration[IO]
-  implicit val dbUtil: ReactiveDoobieUtil[Observable, IO] = ReactiveDoobieUtil[Observable, IO]
+  implicit val dbUtil: ReactiveDoobieUtil[Observable, IO] = SimpleReactiveDoobieUtil[Observable, IO]
   val userRepository = DoobieReactiveUserRepository[Observable, IO]
   val userService = DefaultReactiveUserService[Observable, IO](userRepository)
   val errorHandler: Throwable => Observable[User] = _ => Observable.empty

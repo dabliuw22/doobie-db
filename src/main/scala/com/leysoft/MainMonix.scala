@@ -6,7 +6,7 @@ import com.leysoft.application.DefaultUserService
 import com.leysoft.domain.User
 import com.leysoft.infrastructure.doobie.DoobieUserRepository
 import com.leysoft.infrastructure.doobie.config.DoobieConfiguration
-import com.leysoft.infrastructure.doobie.util.DoobieUtil
+import com.leysoft.infrastructure.doobie.util.{DoobieUtil, SimpleDoobieUtil}
 import com.typesafe.scalalogging.Logger
 import monix.eval.Task
 import monix.execution.{Ack, Scheduler}
@@ -21,7 +21,7 @@ object MainMonix extends App {
   implicit val scheduler: Scheduler = Scheduler.computation()
   implicit val cs: ContextShift[Task] = Task.contextShift(scheduler)
   implicit val db: DoobieConfiguration[Task] = DoobieConfiguration[Task]
-  implicit val dbUtil: DoobieUtil[Task] = DoobieUtil[Task]
+  implicit val dbUtil: DoobieUtil[Task] = SimpleDoobieUtil[Task]
   val userRepository = DoobieUserRepository[Task]
   val userService = DefaultUserService[Task](userRepository)
   //val newUser = userService.create(User(200, "username200")).runSyncUnsafe()
